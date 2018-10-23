@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Runtime.Serialization;
-using System.Net.Http;
+//using System.Text.RegularExpressions;
+//using System.ComponentModel.DataAnnotations;
+//using System.Net;
+//using System.Runtime.Serialization;
+//using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using MyblogApp.Models;
-using Microsoft.AspNetCore.Cors;
+//using Microsoft.AspNetCore.Cors;
 
 
 // {Lav en REST-baseret webservice, som kan håndtere opskrifter. 
