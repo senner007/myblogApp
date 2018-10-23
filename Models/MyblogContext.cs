@@ -16,7 +16,9 @@ namespace MyblogApp.Models
         }
 
         public virtual DbSet<Categories> Categories { get; set; }
+        public virtual DbSet<Efmigrationshistory> Efmigrationshistory { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }
+        public virtual DbSet<Recipies> Recipies { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,6 +50,20 @@ namespace MyblogApp.Models
                     .HasColumnType("varchar(255)");
             });
 
+            modelBuilder.Entity<Efmigrationshistory>(entity =>
+            {
+                entity.HasKey(e => e.MigrationId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("__efmigrationshistory");
+
+                entity.Property(e => e.MigrationId).HasColumnType("varchar(95)");
+
+                entity.Property(e => e.ProductVersion)
+                    .IsRequired()
+                    .HasColumnType("varchar(32)");
+            });
+
             modelBuilder.Entity<Posts>(entity =>
             {
                 entity.ToTable("posts");
@@ -56,29 +72,34 @@ namespace MyblogApp.Models
                     .HasColumnName("id")
                     .HasColumnType("int(11)");
 
-                entity.Property(e => e.Author)
-                    .IsRequired()
-                    .HasColumnName("author")
-                    .HasColumnType("varchar(255)");
-
                 entity.Property(e => e.Body)
                     .IsRequired()
                     .HasColumnName("body")
                     .HasColumnType("text");
 
-                entity.Property(e => e.CategoryId)
-                    .HasColumnName("category_id")
-                    .HasColumnType("int(11)");
-
-                entity.Property(e => e.CreatedAt)
-                    .HasColumnName("created_at")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("'CURRENT_TIMESTAMP'");
-
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("title")
                     .HasColumnType("varchar(255)");
+            });
+
+            modelBuilder.Entity<Recipies>(entity =>
+            {
+                entity.ToTable("recipies");
+
+                entity.Property(e => e.Id).HasColumnType("int(11)");
+
+                entity.Property(e => e.Description)
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                entity.Property(e => e.Ingredients)
+                    .IsRequired()
+                    .HasColumnType("text");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasColumnType("varchar(250)");
             });
         }
     }
