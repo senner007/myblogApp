@@ -7,6 +7,8 @@ namespace MyblogApp.Models
     public partial class MyblogContext : DbContext
     {
         public MyblogContext()
+
+
         {
         }
 
@@ -14,7 +16,15 @@ namespace MyblogApp.Models
             : base(options)
         {
         }
-
+        // TODO : When in memory and when not in memory?
+        // A Microsoft.EntityFrameworkCore.DbSet1 can be used to query and save instances of TEntity . 
+        // LINQ queries against a Microsoft.EntityFrameworkCore.DbSet1 will be translated into queries against the database.
+        // The results of a LINQ query against a Microsoft.EntityFrameworkCore.DbSet`1 will contain the results 
+        // returned from the database and may not reflect changes made in the context that have not been persisted to the database. 
+        // For example, the results will not contain newly added entities and may still contain entities that are marked for deletion.
+        // Depending on the database being used, 
+        // some parts of a LINQ query against a Microsoft.EntityFrameworkCore.DbSet`1 may be evaluated in memory 
+        // rather than being translated into a database query.
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<Efmigrationshistory> Efmigrationshistory { get; set; }
         public virtual DbSet<Posts> Posts { get; set; }

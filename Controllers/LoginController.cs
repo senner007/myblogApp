@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using MyblogApp.Models;
@@ -15,6 +16,7 @@ namespace MyblogApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class LoginController : ControllerBase
     {
         MyblogContext dbContext = new MyblogContext();
@@ -52,7 +54,7 @@ namespace MyblogApp.Controllers
 
                     return Ok(tokenString);
                 }
-                return BadRequest("Wrong Username or Password!");
+                return BadRequest("Wrong Username and/or Password!");
             }
             return BadRequest("Wrong request!");
         }

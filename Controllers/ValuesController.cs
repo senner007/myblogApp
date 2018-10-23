@@ -10,6 +10,7 @@ using System.Runtime.Serialization;
 using System.Net.Http;
 using Microsoft.AspNetCore.Authorization;
 using MyblogApp.Models;
+using Microsoft.AspNetCore.Cors;
 
 
 // {Lav en REST-baseret webservice, som kan håndtere opskrifter. 
@@ -21,9 +22,12 @@ namespace webapi.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
+    // [EnableCors("AllowSpecificOrigin")]
     public class ValuesController : ControllerBase
     {
         MyblogContext dbContext = new MyblogContext();
+
+        // TODO: Det her virker dumt. Er der en bedre måde at gøre det på?
         string ToLowerOREmpty(string query) => !String.IsNullOrEmpty(query) ? query.ToLower() : "";
         // GET api/values
         [HttpGet]
