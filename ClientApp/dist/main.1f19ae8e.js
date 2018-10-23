@@ -105,17 +105,10 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   // Override the current require with this new one
   return newRequire;
 })({"main.js":[function(require,module,exports) {
-// $.ajax({
-//     url: 'https://localhost:5001/api/values',
-//     type: 'GET',
-//     beforeSend: function (xhr) {
-//         xhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJleHAiOjE1NDAzMTQ2MDYsImlzcyI6Im15c2l0ZS5jb20iLCJhdWQiOiJteXNpdGUuY29tIn0.RkmgmobdAv7pR4PQxX0D4Efsm4wU9WO68nLTx0Di2zU');
-//     },
-//     success: function (data) { console.log(data) },
-//     error: function (data) { console.log(data) },
-// });
+// for at få en token skal man lave en POST request til https://localhost:5001/api/login/token Basic Auth Username: Admin, Password: pass
 // Token er valid i 10 minutter
-var token = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJleHAiOjE1NDAzMTgxNDUsImlzcyI6Im15c2l0ZS5jb20iLCJhdWQiOiJteXNpdGUuY29tIn0.SQzl--NeCymM1Yna_S156WPoXxbjqmQtYacx52MuG4w";
+// Eksempel token
+var token = "eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJleHAiOjE1NDAzMjI3ODksImlzcyI6Im15c2l0ZS5jb20iLCJhdWQiOiJteXNpdGUuY29tIn0.LmLNXUsRziMjLpqQFHfT7hjXJC7qUyQao7sBGFCpans";
 $.ajax({
   url: 'https://localhost:5001/api/values',
   headers: {
@@ -127,7 +120,13 @@ $.ajax({
   },
   method: 'GET',
   success: function success(data) {
-    console.log(data);
+    document.body.innerHTML = data.map(function (m) {
+      return Object.values(m);
+    }).map(function (mm) {
+      return mm.map(function (mmm) {
+        return '<p style="margin:0; font-size: 18px;">' + mmm + '</p>';
+      }).join("");
+    }).join("");
   }
 });
 },{}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -157,7 +156,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54462" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65153" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
