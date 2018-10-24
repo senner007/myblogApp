@@ -38,16 +38,14 @@ namespace MyblogApp.Controllers
                 // username : Admin, password : pass
                 if ( sha256_hash(usernameAndPass[0]) == GetFromDB("Username") && sha256_hash(usernameAndPass[1]) == GetFromDB("Password")) 
                 {
-                    Claim[] claimsData = new[] { new Claim(ClaimTypes.Name, usernameAndPass[0])};
-                    SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sdvbcbyjsdwenoidffzmdukcywncpsjdjdjfhwicxmcblsokskjdjfhfhslwop"));
-                    SigningCredentials signInCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+                    SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey));
                     
                     JwtSecurityToken token = new JwtSecurityToken(
                         issuer: "mysite.com",
                         audience: "mysite.com",
-                        expires: DateTime.Now.AddMinutes(10),
-                        claims: claimsData,
-                        signingCredentials: signInCred
+                        expires: DateTime.Now.AddMinutes(100),
+                        claims: new[] { new Claim(ClaimTypes.Name, usernameAndPass[0])},
+                        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
                     );
 
                     String tokenString = new JwtSecurityTokenHandler().WriteToken(token);

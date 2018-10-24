@@ -8,14 +8,21 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 //using Microsoft.Extensions.Logging;
 //using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MyblogApp.Models;
 
-namespace myblogApp
+namespace MyblogApp
 {
+    public static class AppSettingsClass {
+        public static string MyConnection { get; set; }
+        public static string SecurityKey { get; set; } 
+
+    }
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -38,11 +45,17 @@ namespace myblogApp
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = "mysite.com",
                     ValidAudience = "mysite.com",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("sdvbcbyjsdwenoidffzmdukcywncpsjdjdjfhwicxmcblsokskjdjfhfhslwop"))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey))
                 };
             });
+
+            AppSettingsClass.MyConnection = Configuration.GetConnectionString("DefaultConnection");
+            AppSettingsClass.SecurityKey = Configuration["Jwt:Key"];
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddCors();
+            services.AddCors();           
+            services.AddDbContext<MyblogContext>(options =>
+                options.UseMySql(AppSettingsClass.MyConnection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

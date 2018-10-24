@@ -1,14 +1,14 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols;
 
 namespace MyblogApp.Models
 {
     public partial class MyblogContext : DbContext
     {
         public MyblogContext()
-
-
         {
         }
 
@@ -32,10 +32,11 @@ namespace MyblogApp.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+
             if (!optionsBuilder.IsConfigured)
             {
 // #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("server=localhost;database=myblog;user=root;pwd=123456;");
+                optionsBuilder.UseMySql(AppSettingsClass.MyConnection);
             }
         }
 
