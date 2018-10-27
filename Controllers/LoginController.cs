@@ -19,7 +19,7 @@ namespace MyblogApp.Controllers
     
     public class LoginController : ControllerBase
     {
-        MyblogContext dbContext = new MyblogContext();
+       
 
 
         [HttpPost("token")]
@@ -33,10 +33,12 @@ namespace MyblogApp.Controllers
                 String credValue = header.ToString().Substring("Basic ".Length).Trim();
                 String usernameAndPassenc = Encoding.UTF8.GetString(Convert.FromBase64String(credValue));
                 String[] usernameAndPass = usernameAndPassenc.Split(":");
-                string GetFromDB(string title) => dbContext.Posts.Where(w => w.Title == title).FirstOrDefault().Body;
+
+                GetUser getUser = new GetUser();
                 // check in db
                 // username : Admin, password : pass
-                if ( sha256_hash(usernameAndPass[0]) == GetFromDB("Username") && sha256_hash(usernameAndPass[1]) == GetFromDB("Password")) 
+                // username : User, password : pass2
+                if ( usernameAndPass[0] == getUser.GetUserName(usernameAndPass[0]) && sha256_hash(usernameAndPass[1]) == getUser.GetUserPass(usernameAndPass[0])) 
                 {
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey));
                     
@@ -92,7 +94,12 @@ namespace MyblogApp.Controllers
             return Sb.ToString();
         }
 
-       
+    }
+    public class GetUser 
+    {
+        MyblogContext dbContext = new MyblogContext();
+        public string GetUserName(string user) => dbContext.Users.Where(w => w.Username == user).FirstOrDefault().Username;
+        public string GetUserPass(string user) => dbContext.Users.Where(w => w.Username == user).FirstOrDefault().Password;
     }
 
     

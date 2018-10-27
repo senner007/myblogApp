@@ -43,7 +43,7 @@ namespace MyblogApp
                     ValidateIssuer =  true,
                     ValidateAudience = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "mysite.com",
+                    ValidIssuer = "https://localhost:5001/",
                     ValidAudience = "mysite.com",
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey))
                 };

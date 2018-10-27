@@ -1,0 +1,3 @@
+Skriv:
+mysql -u root -p
+pass: 123456
