@@ -41,11 +41,11 @@ namespace MyblogApp.Controllers
                     SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey));
                     
                     JwtSecurityToken token = new JwtSecurityToken(
-                        issuer: "mysite.com",
-                        audience: "mysite.com",
-                        expires: DateTime.Now.AddMinutes(100),
-                        claims: new[] { new Claim(ClaimTypes.Name, usernameAndPass[0])},
-                        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
+                         issuer: "https://localhost:5001/",
+                         audience: "mysite.com",
+                         expires: DateTime.Now.AddMinutes(100),
+                         claims: new[] { new Claim(ClaimTypes.Name, usernameAndPass[0])},
+                        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
                     );
 
                     String tokenString = new JwtSecurityTokenHandler().WriteToken(token);
