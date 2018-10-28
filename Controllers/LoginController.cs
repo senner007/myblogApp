@@ -40,7 +40,8 @@ namespace MyblogApp.Controllers
 
             ValidateUser validateUser = new ValidateUser();
 
-            // TODO: Er der en grund til at eksekvere det async?
+            // TODO: Er det nødvendigt at eksekvere det async?
+            // https://stackoverflow.com/questions/31185072/effectively-use-async-await-with-asp-net-web-api
             if ( await validateUser.CheckUserAndPassword(username, password)) 
             {
                 SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey));
@@ -75,11 +76,11 @@ namespace MyblogApp.Controllers
             }
             if (GetUserName(user) != null) {
              
-                 if (await Task.Factory.StartNew(() => CalculateHash(user, password))) return true;
+                if (await Task.Factory.StartNew(() => CalculateHash(user, password))) return true;
                 return false;
             }
              // Dette er for at eksekvere argon2 algoritmen uanset brugernavn. Responstiden forbliver derved ens.
-            CalculatePasswordFirst();
+            await Task.Factory.StartNew(() => CalculatePasswordFirst());
             return false;
         }
         private void CalculatePasswordFirst() 
