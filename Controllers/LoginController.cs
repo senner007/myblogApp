@@ -26,40 +26,39 @@ namespace MyblogApp.Controllers
 
             // from https://www.youtube.com/watch?v=RRgBhgrBpKU&index=2&list=PLgWtWADUClwBhw1EIHtxAWBgUQ_Esc7c4
             var header = Request.Headers["Authorization"];
-            if (header.ToString().StartsWith("Basic"))
+            if (!header.ToString().StartsWith("Basic")) return BadRequest("Authorization Header should start with 'Basic");
+
+            string credValue = header.ToString().Substring("Basic ".Length).Trim();
+            string usernameAndPassenc = Encoding.UTF8.GetString(Convert.FromBase64String(credValue));
+            string[] usernameAndPass = usernameAndPassenc.Split(":");
+            string username = usernameAndPass[0];
+            string password = usernameAndPass[1];
+
+            // check in db
+            // username : Admin, password : pass
+            // username : User, password : pass2
+
+            ValidateUser validateUser = new ValidateUser();
+
+            // TODO: Er der en grund til at eksekvere det async?
+            if ( await validateUser.CheckUserAndPassword(username, password)) 
             {
-                string credValue = header.ToString().Substring("Basic ".Length).Trim();
-                string usernameAndPassenc = Encoding.UTF8.GetString(Convert.FromBase64String(credValue));
-                string[] usernameAndPass = usernameAndPassenc.Split(":");
-                string username = usernameAndPass[0];
-                string password = usernameAndPass[1];
+                SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey));
+                
+                JwtSecurityToken token = new JwtSecurityToken(
+                        issuer: "https://localhost:5001/",
+                        audience: "mysite.com",
+                        expires: DateTime.Now.AddMinutes(100),
+                        claims: new[] { new Claim(ClaimTypes.Name, username)},
+                    signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
+                );
 
-                // check in db
-                // username : Admin, password : pass
-                // username : User, password : pass2
+                string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-                ValidateUser validateUser = new ValidateUser();
-
-                // TODO: Er der en grund til at eksekvere det async?
-                if ( await validateUser.CheckUserAndPassword(username, password)) 
-                {
-                    SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppSettingsClass.SecurityKey));
-                    
-                    JwtSecurityToken token = new JwtSecurityToken(
-                         issuer: "https://localhost:5001/",
-                         audience: "mysite.com",
-                         expires: DateTime.Now.AddMinutes(100),
-                         claims: new[] { new Claim(ClaimTypes.Name, username)},
-                        signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-                    );
-
-                    string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-                    return Ok(tokenString);
-                }
-                return BadRequest("Wrong Username and/or Password!");
+                return Ok(tokenString);
             }
-            return BadRequest("Wrong request!");
+            return BadRequest("Wrong Username and/or Password!");
+        
         }
 
     }
